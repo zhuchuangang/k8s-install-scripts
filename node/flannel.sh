@@ -84,6 +84,7 @@ while true; do
       mk /coreos.com/network/config "{\"Network\":\"${FLANNEL_NET}\"}" >/dev/null 2>&1
     attempt=$((attempt+1))
     sleep 3
+    echo "Store FLANNEL_NET to etcd success!"
   fi
 done
 wait

@@ -93,3 +93,4 @@ NAME             STATUS    AGE       VERSION
 
 >注意：如果kubernetes和flannel下载较慢，可以将kubernetes和flannel事先下载好,放到node/kube-node.sh所在目录下。flannel下载地址https://github.com/coreos/flannel/releases/download/v0.7.1/flannel-v0.7.1-linux-amd64.tar.gz
 
+由于在kubernetes中是以Pod而不是docker容器作为管理单元，在kubelet创建Pod时，还通过启动一个名为google_containers/pause的镜像来实现Pod的概念。该镜像存在于谷歌的镜像库http://gcr.io中，需要将其下载并push到私有Docker Registry中去，在本脚步中使用下面配置 --pod_infra_container_image=hub.c.163.com/k8s163/pause-amd64:3.0。

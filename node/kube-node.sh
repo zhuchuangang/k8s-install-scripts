@@ -30,6 +30,7 @@ export MASTER_PASSWORD=${4:-}
 export ETCD_SERVERS=${5:-}
 export FLANNEL_NET=${6:-"172.18.0.0/16"}
 export DOCKER_OPTS=${7:-"--registry-mirror=https://5md0553g.mirror.aliyuncs.com"}
+export KUBELET_POD_INFRA_CONTAINER=${8:-"hub.c.163.com/k8s163/pause-amd64:3.0"}
 
 echo '============================================================'
 echo '====================Disable selinux and firewalld...========'
@@ -57,10 +58,7 @@ sh flannel.sh ${ETCD_SERVERS} ${MASTER_ADDRESS} ${MASTER_USER} ${MASTER_PASSWORD
 sh docker.sh ${DOCKER_OPTS}
 
 #配置kube api server，并启动服务
-sh kubelet.sh ${MASTER_ADDRESS} ${NODE_ADDRESS} "" "" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR}
+sh kubelet.sh ${MASTER_ADDRESS} ${NODE_ADDRESS} ${KUBELET_POD_INFRA_CONTAINER} "" "" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR}
 
 #配置kube controller manager，并启动服务
 sh kube-proxy.sh ${NODE_ADDRESS} ${MASTER_ADDRESS} ${KUBE_BIN_DIR} ${KUBE_CFG_DIR}
-
-
-

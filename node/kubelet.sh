@@ -6,10 +6,11 @@ set -o pipefail
 
 MASTER_ADDRESS=${1:-""}
 NODE_ADDRESS=${2:-""}
-DNS_SERVER_IP=${3:-""}
-DNS_DOMAIN=${4:-"cluster.local"}
-KUBE_BIN_DIR=${5:-"/opt/kubernetes/bin"}
-KUBE_CFG_DIR=${6:-"/opt/kubernetes/cfg"}
+KUBELET_POD_INFRA_CONTAINER=${3:-"hub.c.163.com/k8s163/pause-amd64:3.0"}
+DNS_SERVER_IP=${4:-""}
+DNS_DOMAIN=${5:-"cluster.local"}
+KUBE_BIN_DIR=${6:-"/opt/kubernetes/bin"}
+KUBE_CFG_DIR=${7:-"/opt/kubernetes/cfg"}
 
 echo '============================================================'
 echo '===================Config kubelet... ======================='
@@ -85,8 +86,12 @@ KUBELET_API_SERVER="--api-servers=https://${MASTER_ADDRESS}:443"
 #KUBELET__DNS_IP="--cluster-dns=${DNS_SERVER_IP}"
 #KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
 
+#kubelet pod infra container
+KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=${KUBELET_POD_INFRA_CONTAINER}"
+
 # Add your own!
 KUBELET_ARGS="--kubeconfig=${KUBE_CFG_DIR}/kubeconfig.yaml"
+
 EOF
 
 
@@ -110,6 +115,7 @@ ExecStart=${KUBE_BIN_DIR}/kubelet \
                     \${KUBE_ALLOW_PRIV}      \
                     \${KUBELET__DNS_IP}      \
                     \${KUBELET_DNS_DOMAIN}   \
+                    \${KUBELET_POD_INFRA_CONTAINER}   \
                     \${KUBELET_ARGS}
 
 Restart=on-failure
