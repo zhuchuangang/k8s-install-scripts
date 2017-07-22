@@ -82,6 +82,7 @@ sh kube-node.sh "172.16.120.153" "172.16.120.151" "root" "123456" "http://172.16
 - 第5个参数ETCD_SERVERS是etcd集群地址
 - 第6个参数FLANNEL_NET是flannel地址段，默认为172.18.0.0/16
 - 第7个参数DOCKER_OPTS是docker参数配置
+- 第8个参数KUBELET_POD_INFRA_CONTAINER是kubelet pod的基础镜像名称，默认值为hub.c.163.com/k8s163/pause-amd64:3.0
 
 安装验证：
 ```
