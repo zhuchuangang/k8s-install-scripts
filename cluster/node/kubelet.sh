@@ -7,7 +7,7 @@ set -o pipefail
 MASTER_ADDRESS=${1:-""}
 NODE_ADDRESS=${2:-""}
 KUBELET_POD_INFRA_CONTAINER=${3:-"hub.c.163.com/k8s163/pause-amd64:3.0"}
-DNS_SERVER_IP=${4:-""}
+DNS_SERVER_IP=${4:-"10.0.0.10"}
 DNS_DOMAIN=${5:-"cluster.local"}
 KUBE_BIN_DIR=${6:-"/opt/kubernetes/bin"}
 KUBE_CFG_DIR=${7:-"/opt/kubernetes/cfg"}
@@ -83,8 +83,8 @@ NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
 KUBELET_API_SERVER="--api-servers=https://${MASTER_ADDRESS}:443"
 
 # DNS info
-#KUBELET__DNS_IP="--cluster-dns=${DNS_SERVER_IP}"
-#KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
+KUBELET_DNS_IP="--cluster-dns=${DNS_SERVER_IP}"
+KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
 
 #kubelet pod infra container
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=${KUBELET_POD_INFRA_CONTAINER}"
@@ -113,7 +113,7 @@ ExecStart=${KUBE_BIN_DIR}/kubelet \
                     \${NODE_HOSTNAME}        \
                     \${KUBELET_API_SERVER}   \
                     \${KUBE_ALLOW_PRIV}      \
-                    \${KUBELET__DNS_IP}      \
+                    \${KUBELET_DNS_IP}       \
                     \${KUBELET_DNS_DOMAIN}   \
                     \${KUBELET_POD_INFRA_CONTAINER}   \
                     \${KUBELET_ARGS}

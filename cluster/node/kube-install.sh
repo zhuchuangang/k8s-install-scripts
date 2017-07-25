@@ -16,24 +16,34 @@ mkdir -p ${KUBE_BIN_DIR}
 mkdir -p ${KUBE_CFG_DIR}
 
 if [ ! -f "./kubernetes.tar.gz" ]; then
+echo "downland kubernetes.tar.gz file"
 wget https://github.com/kubernetes/kubernetes/releases/download/${KUBE_VERSION}/kubernetes.tar.gz
+else
+echo "kubernetes.tar.gz file already exists"
 fi
+
+if [ ! -d "./kubernetes" ]; then
+echo "unzip kubernetes.tar.gz file"
 tar zxvf kubernetes.tar.gz
 sh ./kubernetes/cluster/get-kube-binaries.sh
 tar zxvf ./kubernetes/server/kubernetes-server-linux-amd64.tar.gz
+else
+echo "kubernetes directory already exists"
+fi
 
 
 echo '============================================================'
 echo '===================Install kubernetes... ==================='
 echo '============================================================'
 
-if [ ${INSTALL_MASTER}=true ]; then
-echo "Copy kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet to /opt/kubernetes/bin/ "
+if [ ${INSTALL_MASTER} = "true" ]; then
+echo "This node is a master node!"
+echo "Copy kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet to ${KUBE_BIN_DIR} "
 cd ./kubernetes/server/bin
 cp {kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet} ${KUBE_BIN_DIR}
 else
-echo "Copy kubectl,kube-proxy,kubelet to /opt/kubernetes/bin/ "
-cd ./kubernetes/server/bin
-cp {kubectl,kube-proxy,kubelet} ${KUBE_BIN_DIR}
-
+echo "This node is a slave node!"
+echo "Copy kubectl,kube-proxy,kubelet to ${KUBE_BIN_DIR} "
+cp ./kubernetes/server/bin/{kubectl,kube-proxy,kubelet} ${KUBE_BIN_DIR}
+cp ./kubernetes/cluster/centos/node/bin/{mk-docker-opts.sh,remove-docker0.sh} ${KUBE_BIN_DIR}
 fi

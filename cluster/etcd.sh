@@ -120,7 +120,7 @@ WantedBy=multi-user.target
 EOF
 
 echo '============================================================'
-echo '===================5.start etcd service... ================='
+echo '===================start etcd service... ==================='
 echo '============================================================'
 systemctl daemon-reload
 systemctl enable etcd
