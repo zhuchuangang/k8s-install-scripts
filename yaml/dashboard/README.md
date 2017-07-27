@@ -1,0 +1,2 @@
+dashboard使用NodePort方式进行访问，通过node节点IP加nodePort端口号进行访问。
+

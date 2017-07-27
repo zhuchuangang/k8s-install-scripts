@@ -11,20 +11,20 @@
 
 # 2 安装etcd
 
-etcd.sh实现关闭selinux和firewall，下载v3.2.3版本的etcd，并进行安装，同时将etcd添加到环境变量。
+etcd.sh实现关闭selinux和firewall，下载v3.2.4版本的etcd，并进行安装，同时将etcd添加到环境变量。
 
 在node01节点执行：
-```
+```bash
 sh etcd.sh "node01" "172.16.120.151" "node01=http://172.16.120.151:2380,node02=http://172.16.120.152:2380,node03=http://172.16.120.153:2380"
 ```
 
 在node02节点执行：
-```
+```bash
 sh etcd.sh "node02" "172.16.120.152" "node01=http://172.16.120.151:2380,node02=http://172.16.120.152:2380,node03=http://172.16.120.153:2380"
 ```
 
 在node03节点执行：
-```
+```bash
 sh etcd.sh "node03" "172.16.120.153" "node01=http://172.16.120.151:2380,node02=http://172.16.120.152:2380,node03=http://172.16.120.153:2380"
 ```
 
@@ -32,13 +32,24 @@ sh etcd.sh "node03" "172.16.120.153" "node01=http://172.16.120.151:2380,node02=h
 - 第2个参数是etcd当前节点IP地址ETCD_LISTEN_IP
 - 第3个参数是etcd集群地址ETCD_INITIAL_CLUSTER
 
->注意：如果etcd下载较慢，可以将etcd事先下载好，放到etcd.sh所在目录下。etcd下载地址https://github.com/coreos/etcd/releases/download/v3.2.3/etcd-v3.2.3-linux-amd64
+>注意：如果etcd下载较慢，可以将etcd事先下载好，放到etcd.sh所在目录下。etcd下载地址https://github.com/coreos/etcd/releases/download/v3.2.4/etcd-v3.2.4-linux-amd64.tar.gz
+
+
+安装验证：
+```bash
+etcdctl member list
+etcdctl cluster-health
+```
+如果etcdctl命令无法使用，执行下面的命令，使~/.bash_profile生效
+```bash
+source ~/.bash_profile
+```
 
 # 3 安装kubernetes master
 master/kube-master.sh实现关闭selinux和firewall，下载v1.6.7版本的kubernetes，并进行安装，生成apiserver、controller manager、kube-scheduler服务证书，并使用kubernetes的TLS。
 
 在node01节点执行：
-```
+```bash
 sh kube-master.sh "172.16.120.151" "k8s-node01" "http://172.16.120.151:2379,http://172.16.120.152:2379,http://172.16.120.153:2379"
 ```
 
@@ -49,7 +60,7 @@ sh kube-master.sh "172.16.120.151" "k8s-node01" "http://172.16.120.151:2379,http
 - 第5个参数MASTER_CLUSTER_IP是kubernetes指定master的集群IP,默认值为10.0.0.1
 
 安装验证：
-```
+```bash
 # kubectl get componentstatuses
 NAME                 STATUS    MESSAGE              ERROR
 scheduler            Healthy   ok
@@ -66,12 +77,12 @@ etcd-1               Healthy   {"health": "true"}
 node/kube-node.sh实现关闭selinux和firewall，下载v1.6.7版本的kubernetes，并进行安装，安装服务有flannel、docker、kubelet、kube-proxy，从master节点获取根证书，并生成kubelet、kube-proxy服务证书，使用kubernetes的TLS。
 
 在node02节点执行：
-```
+```bash
 sh kube-node.sh "172.16.120.152" "172.16.120.151" "root" "123456" "http://172.16.120.151:2379,http://172.16.120.152:2379,http://172.16.120.153:2379"
 ```
 
 在node03节点执行：
-```
+```bash
 sh kube-node.sh "172.16.120.153" "172.16.120.151" "root" "123456" "http://172.16.120.151:2379,http://172.16.120.152:2379,http://172.16.120.153:2379"
 ```
 
@@ -85,7 +96,7 @@ sh kube-node.sh "172.16.120.153" "172.16.120.151" "root" "123456" "http://172.16
 - 第8个参数KUBELET_POD_INFRA_CONTAINER是kubelet pod的基础镜像名称，默认值为hub.c.163.com/k8s163/pause-amd64:3.0
 
 安装验证：
-```
+```bash
 # kubectl get nodes
 NAME             STATUS    AGE       VERSION
 172.16.120.152   Ready     8h        v1.6.7

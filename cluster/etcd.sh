@@ -23,7 +23,7 @@ echo "Disable selinux and firewalld success!"
 echo '============================================================'
 echo '====================Downland etcd... ======================='
 echo '============================================================'
-ETCD_VERSION=v3.2.3
+ETCD_VERSION=v3.2.4
 echo "etcd version is $ETCD_VERSION"
 ETCD_FILE=etcd-$ETCD_VERSION-linux-amd64
 echo "etcd zip file is $ETCD_FILE"
@@ -51,8 +51,8 @@ cp $ETCD_FILE/etcdctl $ETCD_BIN_DIR
 rm -rf $ETCD_FILE
 
 sed -i 's/$PATH:/$PATH:\/opt\/kubernetes\/bin:/g' ~/.bash_profile
-source ~/.bash_profile
-
+#source ~/.bash_profile
+exec bash --login
 
 ETCD_DATA_DIR=/var/lib/etcd
 mkdir -p ${ETCD_DATA_DIR}
