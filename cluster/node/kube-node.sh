@@ -21,6 +21,7 @@ export FLANNEL_VERSION=v0.7.1
 #kubernetes执行和配置文件目录
 export KUBE_BIN_DIR=/opt/kubernetes/bin
 export KUBE_CFG_DIR=/opt/kubernetes/cfg
+export KUBE_LOG_DIR=/opt/kubernetes/logs
 
 
 export NODE_ADDRESS=${1:-}
@@ -49,7 +50,7 @@ echo "Disable selinux and firewalld success!"
 sh kube-ssl-node.sh ${NODE_ADDRESS} ${MASTER_ADDRESS} ${MASTER_USER} ${MASTER_PASSWORD}
 
 #安装kubernetes
-sh kube-install.sh "false" ${KUBE_BIN_DIR} ${KUBE_VERSION}
+sh kube-install.sh "false" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR} ${KUBE_VERSION}
 
 #安装顺序为 flannel docker kubelet kube-proxy
 #安装和配置flannel

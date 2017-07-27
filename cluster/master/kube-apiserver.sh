@@ -10,6 +10,7 @@ ETCD_SERVERS=${2:-"http://127.0.0.1:2379"}
 SERVICE_CLUSTER_IP_RANGE=${3:-"10.0.0.0/24"}
 KUBE_BIN_DIR=${4:-"/opt/kubernetes/bin"}
 KUBE_CFG_DIR=${5:-"/opt/kubernetes/cfg"}
+KUBE_LOG_DIR=${6:-"/opt/kubernetes/logs"}
 
 echo '============================================================'
 echo '===================Config kube-apiserver... ================'
@@ -55,13 +56,13 @@ cat <<EOF >${KUBE_CFG_DIR}/config
 KUBE_LOGTOSTDERR="--logtostderr=true"
 
 # journal message level, 0 is debug
-KUBE_LOG_LEVEL="--v=0"
+KUBE_LOG_LEVEL="--v=2"
 
 # Should this cluster be allowed to run privileged docker containers
 KUBE_ALLOW_PRIV="--allow-privileged=true"
 
 # How the controller-manager, scheduler, and proxy find the apiserver
-KUBE_MASTER="--master=https://${MASTER_ADDRESS}:443"
+KUBE_MASTER="--master=https://${MASTER_ADDRESS}:6443"
 EOF
 
 
@@ -81,7 +82,7 @@ KUBE_ETCD_SERVERS="--etcd-servers=${ETCD_SERVERS}"
 KUBE_API_ADDRESS="--bind-address=0.0.0.0"
 
 # --insecure-port=8080: The port on which to serve unsecured, unauthenticated access.
-KUBE_API_PORT="--secure-port=443"
+KUBE_API_PORT="--secure-port=6443"
 
 # --kubelet-port=10250: Kubelet port
 NODE_PORT="--kubelet-port=10250"
@@ -116,6 +117,12 @@ KUBE_API_TLS_CERT_FILE="--tls-cert-file=/srv/kubernetes/server.crt"
 # --tls-private-key-file="": File containing x509 private key matching --tls-cert-file.
 KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/server.key"
 
+# --service-account-key-file="":服务账号文件，包含x509 公私钥
+KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca.key"
+
+#log dir
+KUBE_LOG_DIR="--log-dir=${KUBE_LOG_DIR}"
+
 # Add your own!
 KUBE_API_ARGS=""
 EOF
@@ -131,20 +138,22 @@ After=etcd.service
 [Service]
 EnvironmentFile=-${KUBE_CFG_DIR}/config
 EnvironmentFile=-${KUBE_CFG_DIR}/kube-apiserver
-ExecStart=${KUBE_BIN_DIR}/kube-apiserver  \
-	    \${KUBE_LOGTOSTDERR}         \
-        \${KUBE_LOG_LEVEL}           \
-        \${KUBE_ETCD_SERVERS}        \
-        \${KUBE_API_ADDRESS}         \
-        \${KUBE_API_PORT}            \
-        \${NODE_PORT}                \
-        \${KUBE_ADVERTISE_ADDR}      \
-        \${KUBE_ALLOW_PRIV}          \
-        \${KUBE_SERVICE_ADDRESSES}   \
-        \${KUBE_ADMISSION_CONTROL}   \
-        \${KUBE_API_CLIENT_CA_FILE}  \
-        \${KUBE_API_TLS_CERT_FILE}   \
-        \${KUBE_API_TLS_PRIVATE_KEY_FILE} \
+ExecStart=${KUBE_BIN_DIR}/kube-apiserver  \\
+	    \${KUBE_LOGTOSTDERR}         \\
+        \${KUBE_LOG_LEVEL}           \\
+        \${KUBE_ETCD_SERVERS}        \\
+        \${KUBE_API_ADDRESS}         \\
+        \${KUBE_API_PORT}            \\
+        \${NODE_PORT}                \\
+        \${KUBE_ADVERTISE_ADDR}      \\
+        \${KUBE_ALLOW_PRIV}          \\
+        \${KUBE_SERVICE_ADDRESSES}   \\
+        \${KUBE_ADMISSION_CONTROL}   \\
+        \${KUBE_API_CLIENT_CA_FILE}  \\
+        \${KUBE_API_TLS_CERT_FILE}   \\
+        \${KUBE_API_TLS_PRIVATE_KEY_FILE} \\
+        \${KUBE_SERVICE_ACCOUNT_KEY_FILE} \\
+        \${KUBE_LOG_DIR} \\
         \${KUBE_API_ARGS}
 Restart=on-failure
 

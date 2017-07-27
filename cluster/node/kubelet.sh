@@ -62,7 +62,7 @@ KUBE_LOG_LEVEL="--v=0"
 KUBE_ALLOW_PRIV="--allow-privileged=true"
 
 # How the controller-manager, scheduler, and proxy find the apiserver
-KUBE_MASTER="--master=https://${MASTER_ADDRESS}:443"
+KUBE_MASTER="--master=https://${MASTER_ADDRESS}:6443"
 EOF
 fi
 
@@ -80,7 +80,7 @@ NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
 
 # --api-servers=[]: List of Kubernetes API servers for publishing events,
 # and reading pods and services. (ip:port), comma separated.
-KUBELET_API_SERVER="--api-servers=https://${MASTER_ADDRESS}:443"
+KUBELET_API_SERVER="--api-servers=https://${MASTER_ADDRESS}:6443"
 
 # DNS info
 KUBELET_DNS_IP="--cluster-dns=${DNS_SERVER_IP}"

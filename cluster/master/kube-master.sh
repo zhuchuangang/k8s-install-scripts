@@ -17,6 +17,7 @@ export KUBE_VERSION=v1.6.7
 #kubernetes执行和配置文件目录
 export KUBE_BIN_DIR=/opt/kubernetes/bin
 export KUBE_CFG_DIR=/opt/kubernetes/cfg
+export KUBE_LOG_DIR=/opt/kubernetes/logs
 
 export MASTER_ADDRESS=${1:-}
 export MASTER_DNS=${2:-}
@@ -39,10 +40,10 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 sh kube-ssl-master.sh ${MASTER_ADDRESS} ${MASTER_DNS} ${MASTER_CLUSTER_IP} ${KUBE_CFG_DIR}
 
 #安装kubernetes
-sh kube-install.sh "true" ${KUBE_BIN_DIR} ${KUBE_VERSION}
+sh kube-install.sh "true" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR} ${KUBE_VERSION}
 
 #配置kube api server，并启动服务
-sh kube-apiserver.sh ${MASTER_ADDRESS} ${ETCD_SERVERS} ${SERVICE_CLUSTER_IP_RANGE}
+sh kube-apiserver.sh ${MASTER_ADDRESS} ${ETCD_SERVERS} ${SERVICE_CLUSTER_IP_RANGE} ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR}
 
 #配置kube controller manager，并启动服务
 sh kube-controller-manager.sh ${MASTER_ADDRESS} ${KUBE_BIN_DIR} ${KUBE_CFG_DIR}

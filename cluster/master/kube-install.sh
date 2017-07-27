@@ -6,7 +6,9 @@ set -o pipefail
 
 INSTALL_MASTER=${1:-"true"}
 KUBE_BIN_DIR=${2:-"/opt/kubernetes/bin"}
-KUBE_VERSION=${3:-"v1.6.7"}
+KUBE_CFG_DIR=${3:-"/opt/kubernetes/cfg"}
+KUBE_LOG_DIR=${4:-"/opt/kubernetes/logs"}
+KUBE_VERSION=${5:-"v1.6.7"}
 
 echo '============================================================'
 echo '===================Downland kubernetes... =================='
@@ -14,6 +16,7 @@ echo '============================================================'
 
 mkdir -p ${KUBE_BIN_DIR}
 mkdir -p ${KUBE_CFG_DIR}
+mkdir -p ${KUBE_LOG_DIR}
 
 if [ ! -f "./kubernetes.tar.gz" ]; then
 echo "downland kubernetes.tar.gz file"
@@ -39,8 +42,7 @@ echo '============================================================'
 if [ ${INSTALL_MASTER} = "true" ]; then
 echo "This node is a master node!"
 echo "Copy kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet to ${KUBE_BIN_DIR} "
-cd ./kubernetes/server/bin
-cp {kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet} ${KUBE_BIN_DIR}
+cp ./kubernetes/server/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet} ${KUBE_BIN_DIR}
 else
 echo "This node is a slave node!"
 echo "Copy kubectl,kube-proxy,kubelet to ${KUBE_BIN_DIR} "
