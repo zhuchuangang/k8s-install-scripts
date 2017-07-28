@@ -46,11 +46,12 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
 echo "Disable selinux and firewalld success!"
 
+#安装kubernetes
+sh kube-install.sh "false" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR} ${KUBE_VERSION}
+
 #创建证书
 sh kube-ssl-node.sh ${NODE_ADDRESS} ${MASTER_ADDRESS} ${MASTER_USER} ${MASTER_PASSWORD}
 
-#安装kubernetes
-sh kube-install.sh "false" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR} ${KUBE_VERSION}
 
 #安装顺序为 flannel docker kubelet kube-proxy
 #安装和配置flannel

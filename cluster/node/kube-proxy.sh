@@ -32,11 +32,11 @@ After=network.target
 [Service]
 EnvironmentFile=-${KUBE_CFG_DIR}/config
 EnvironmentFile=-${KUBE_CFG_DIR}/kube-proxy
-ExecStart=${KUBE_BIN_DIR}/kube-proxy     \
-                    \${KUBE_LOGTOSTDERR} \
-                    \${KUBE_LOG_LEVEL}   \
-                    \${NODE_HOSTNAME}    \
-                    \${KUBE_MASTER}      \
+ExecStart=${KUBE_BIN_DIR}/kube-proxy     \\
+                    \${KUBE_LOGTOSTDERR} \\
+                    \${KUBE_LOG_LEVEL}   \\
+                    \${NODE_HOSTNAME}    \\
+                    \${KUBE_MASTER}      \\
                     \${KUBE_PROXY_ARGS}
 Restart=on-failure
 

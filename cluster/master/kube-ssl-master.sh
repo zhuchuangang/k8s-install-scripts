@@ -64,3 +64,15 @@ openssl req -new -key /srv/kubernetes/cs_client.key -subj "/CN=admin/O=system:ma
 
 #使用自建CA签署
 openssl x509 -req -in /srv/kubernetes/cs_client.csr -CA /srv/kubernetes/ca.crt -CAkey /srv/kubernetes/ca.key -CAcreateserial -out /srv/kubernetes/cs_client.crt -days 10000
+
+echo "Create /srv/kubernetes/token_auth_file.csv"
+export BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
+cat	<<EOF >/srv/kubernetes/token_auth_file.csv
+${BOOTSTRAP_TOKEN},kubelet-bootstrap,10001,"system:kubelet-bootstrap"
+EOF
+
+echo "Create /srv/kubernetes/basic_auth_file.csv"
+cat	<<EOF >/srv/kubernetes/basic_auth_file.csv
+admin,admin,1
+system,system,2
+EOF

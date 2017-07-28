@@ -15,26 +15,29 @@ KUBE_CFG_DIR=${7:-"/opt/kubernetes/cfg"}
 echo '============================================================'
 echo '===================Config kubelet... ======================='
 echo '============================================================'
-echo "Create ${KUBE_CFG_DIR}/kubeconfig.yaml"
-cat <<EOF >${KUBE_CFG_DIR}/kubeconfig.yaml
-apiVersion: v1
-kind: Config
-users:
-- name: kubelet
-  user:
-    client-certificate: /srv/kubernetes/kubelet_client.crt
-    client-key: /srv/kubernetes/kubelet_client.key
-clusters:
-- name: local
-  cluster:
-    certificate-authority: /srv/kubernetes/ca.crt
-contexts:
-- context:
-    cluster: local
-    user: kubelet
-  name: my-context
-current-context: my-context
-EOF
+#echo "Create ${KUBE_CFG_DIR}/kubeconfig.yaml"
+#cat <<EOF >${KUBE_CFG_DIR}/kubeconfig.yaml
+#apiVersion: v1
+#kind: Config
+#users:
+#- name: kubelet
+#  user:
+#    client-certificate: /srv/kubernetes/kubelet_client.crt
+#    client-key: /srv/kubernetes/kubelet_client.key
+#clusters:
+#- name: local
+#  cluster:
+#    certificate-authority: /srv/kubernetes/ca.crt
+#contexts:
+#- context:
+#    cluster: local
+#    user: kubelet
+#  name: my-context
+#current-context: my-context
+#EOF
+
+
+
 
 
 
@@ -90,7 +93,7 @@ KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=${KUBELET_POD_INFRA_CONTAINER}"
 
 # Add your own!
-KUBELET_ARGS="--kubeconfig=${KUBE_CFG_DIR}/kubeconfig.yaml"
+KUBELET_ARGS="--kubeconfig=${KUBE_CFG_DIR}/kubelet.kubeconfig"
 
 EOF
 
@@ -105,17 +108,17 @@ Requires=docker.service
 [Service]
 EnvironmentFile=-${KUBE_CFG_DIR}/config
 EnvironmentFile=-${KUBE_CFG_DIR}/kubelet
-ExecStart=${KUBE_BIN_DIR}/kubelet \
-                    \${KUBE_LOGTOSTDERR}     \
-                    \${KUBE_LOG_LEVEL}       \
-                    \${NODE_ADDRESS}         \
-                    \${NODE_PORT}            \
-                    \${NODE_HOSTNAME}        \
-                    \${KUBELET_API_SERVER}   \
-                    \${KUBE_ALLOW_PRIV}      \
-                    \${KUBELET_DNS_IP}       \
-                    \${KUBELET_DNS_DOMAIN}   \
-                    \${KUBELET_POD_INFRA_CONTAINER}   \
+ExecStart=${KUBE_BIN_DIR}/kubelet \\
+                    \${KUBE_LOGTOSTDERR}     \\
+                    \${KUBE_LOG_LEVEL}       \\
+                    \${NODE_ADDRESS}         \\
+                    \${NODE_PORT}            \\
+                    \${NODE_HOSTNAME}        \\
+                    \${KUBELET_API_SERVER}   \\
+                    \${KUBE_ALLOW_PRIV}      \\
+                    \${KUBELET_DNS_IP}       \\
+                    \${KUBELET_DNS_DOMAIN}   \\
+                    \${KUBELET_POD_INFRA_CONTAINER}   \\
                     \${KUBELET_ARGS}
 
 Restart=on-failure

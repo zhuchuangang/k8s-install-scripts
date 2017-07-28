@@ -16,18 +16,6 @@ echo '============================================================'
 echo '===================Config kube-apiserver... ================'
 echo '============================================================'
 
-echo "Create /srv/kubernetes/token_auth_file.csv"
-export BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
-cat	<<EOF >/srv/kubernetes/token_auth_file.csv
-${BOOTSTRAP_TOKEN},kubelet-bootstrap,10001,"system:kubelet-bootstrap"
-EOF
-
-echo "Create /srv/kubernetes/basic_auth_file.csv"
-cat	<<EOF >/srv/kubernetes/basic_auth_file.csv
-admin,admin,1
-system,system,2
-EOF
-
 echo "Create ${KUBE_CFG_DIR}/kubeconfig.yaml"
 cat <<EOF >${KUBE_CFG_DIR}/kubeconfig.yaml
 apiVersion: v1
