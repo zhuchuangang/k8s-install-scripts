@@ -106,3 +106,15 @@ NAME             STATUS    AGE       VERSION
 >注意：如果kubernetes和flannel下载较慢，可以将kubernetes和flannel事先下载好,放到node/kube-node.sh所在目录下。flannel下载地址https://github.com/coreos/flannel/releases/download/v0.7.1/flannel-v0.7.1-linux-amd64.tar.gz
 
 由于在kubernetes中是以Pod而不是docker容器作为管理单元，在kubelet创建Pod时，还通过启动一个名为google_containers/pause的镜像来实现Pod的概念。该镜像存在于谷歌的镜像库http://gcr.io中，需要将其下载并push到私有Docker Registry中去，在本脚步中使用下面配置 --pod_infra_container_image=hub.c.163.com/k8s163/pause-amd64:3.0。
+
+
+参考：
+http://tonybai.com/2017/07/20/fix-cannot-access-dashboard-in-k8s-1-6-4/
+
+https://stackoverflow.com/questions/44469277/var-log-kube-apiserver-log-not-work-for-kubernetes1-6
+
+https://github.com/opsnull/follow-me-install-kubernetes-cluster
+
+http://www.cnblogs.com/breg/p/5923604.html
+
+https://wiki.shileizcc.com/display/KUB/Kubernetes+HA+Cluster+Build#KubernetesHAClusterBuild-配置CA证书和私钥

@@ -15,6 +15,19 @@ KUBE_LOG_DIR=${6:-"/opt/kubernetes/logs"}
 echo '============================================================'
 echo '===================Config kube-apiserver... ================'
 echo '============================================================'
+
+echo "Create /srv/kubernetes/token_auth_file.csv"
+export BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
+cat	<<EOF >/srv/kubernetes/token_auth_file.csv
+${BOOTSTRAP_TOKEN},kubelet-bootstrap,10001,"system:kubelet-bootstrap"
+EOF
+
+echo "Create /srv/kubernetes/basic_auth_file.csv"
+cat	<<EOF >/srv/kubernetes/basic_auth_file.csv
+admin,admin,1
+system,system,2
+EOF
+
 echo "Create ${KUBE_CFG_DIR}/kubeconfig.yaml"
 cat <<EOF >${KUBE_CFG_DIR}/kubeconfig.yaml
 apiVersion: v1
@@ -52,11 +65,11 @@ cat <<EOF >${KUBE_CFG_DIR}/config
 #   kube-scheduler.service
 #   kubelet.service
 #   kube-proxy.service
-# logging to stderr means we get it in the systemd journal
-KUBE_LOGTOSTDERR="--logtostderr=true"
+# logging to stderr means we get it in the systemd journal,设置为false输出日志到目录
+KUBE_LOGTOSTDERR="--logtostderr=false"
 
 # journal message level, 0 is debug
-KUBE_LOG_LEVEL="--v=2"
+KUBE_LOG_LEVEL="--v=0"
 
 # Should this cluster be allowed to run privileged docker containers
 KUBE_ALLOW_PRIV="--allow-privileged=true"
@@ -79,7 +92,8 @@ cat <<EOF >${KUBE_CFG_DIR}/kube-apiserver
 KUBE_ETCD_SERVERS="--etcd-servers=${ETCD_SERVERS}"
 
 # --insecure-bind-address=127.0.0.1: The IP address on which to serve the --insecure-port.
-KUBE_API_ADDRESS="--bind-address=0.0.0.0"
+KUBE_API_ADDRESS="--bind-address=${MASTER_ADDRESS}"
+KUBE_API_INSECURE_ADDRESS="--insecure-bind-address=${MASTER_ADDRESS}"
 
 # --insecure-port=8080: The port on which to serve unsecured, unauthenticated access.
 KUBE_API_PORT="--secure-port=6443"
@@ -120,11 +134,23 @@ KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/server.key
 # --service-account-key-file="":服务账号文件，包含x509 公私钥
 KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca.key"
 
+# --authorization-mode=RBAC
+KUBE_AUTHORIZATION_MODE="--authorization-mode=RBAC"
+
+#--experimental-bootstrap-token-auth
+KUBE_BOOTSTRAP_TOKEN_AUTH="--experimental-bootstrap-token-auth"
+
+#--token-auth-file=/srv/kubernetes/token_auth_file.csv
+KUBE_TOKEN_AUTH_FILE="--token-auth-file=/srv/kubernetes/token_auth_file.csv"
+
+#--basic-auth-file=/srv/kubernetes/basic_auth_file.csv
+KUBE_BASIC_AUTH_FILE="--basic-auth-file=/srv/kubernetes/basic_auth_file.csv"
+
 #log dir
 KUBE_LOG_DIR="--log-dir=${KUBE_LOG_DIR}"
 
 # Add your own!
-KUBE_API_ARGS=""
+KUBE_API_ARGS="--runtime-config=rbac.authorization.k8s.io/v1beta1"
 EOF
 
 echo "Create /usr/lib/systemd/system/kube-apiserver.service file"
@@ -143,6 +169,7 @@ ExecStart=${KUBE_BIN_DIR}/kube-apiserver  \\
         \${KUBE_LOG_LEVEL}           \\
         \${KUBE_ETCD_SERVERS}        \\
         \${KUBE_API_ADDRESS}         \\
+        \${KUBE_API_INSECURE_ADDRESS} \\
         \${KUBE_API_PORT}            \\
         \${NODE_PORT}                \\
         \${KUBE_ADVERTISE_ADDR}      \\
@@ -153,6 +180,10 @@ ExecStart=${KUBE_BIN_DIR}/kube-apiserver  \\
         \${KUBE_API_TLS_CERT_FILE}   \\
         \${KUBE_API_TLS_PRIVATE_KEY_FILE} \\
         \${KUBE_SERVICE_ACCOUNT_KEY_FILE} \\
+        \${KUBE_AUTHORIZATION_MODE}  \\
+        \${KUBE_TOKEN_AUTH_FILE}     \\
+        \${KUBE_BASIC_AUTH_FILE}     \\
+        \${KUBE_BOOTSTRAP_TOKEN_AUTH} \\
         \${KUBE_LOG_DIR} \\
         \${KUBE_API_ARGS}
 Restart=on-failure
