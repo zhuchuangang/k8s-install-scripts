@@ -18,6 +18,7 @@ export KUBE_VERSION=v1.6.7
 export KUBE_BIN_DIR=/opt/kubernetes/bin
 export KUBE_CFG_DIR=/opt/kubernetes/cfg
 export KUBE_LOG_DIR=/opt/kubernetes/logs
+export KUBE_SSL_DIR=/srv/kubernetes
 
 export MASTER_ADDRESS=${1:-}
 export MASTER_DNS=${2:-}
@@ -37,7 +38,7 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
 
 #创建证书
-sh kube-ssl-master.sh ${MASTER_ADDRESS} ${MASTER_DNS} ${MASTER_CLUSTER_IP} ${KUBE_CFG_DIR}
+sh kube-ssl-master.sh ${MASTER_ADDRESS} ${MASTER_DNS} ${MASTER_CLUSTER_IP} ${KUBE_SSL_DIR}
 
 #安装kubernetes
 sh kube-install.sh "true" ${KUBE_BIN_DIR} ${KUBE_CFG_DIR} ${KUBE_LOG_DIR} ${KUBE_VERSION}

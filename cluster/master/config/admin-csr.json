@@ -1,0 +1,21 @@
+{
+  "CN": "admin",
+  "hosts": [
+    "172.16.120.151",
+    "172.16.120.152",
+    "172.16.120.153"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "system:masters",
+      "OU": "System"
+    }
+  ]
+}

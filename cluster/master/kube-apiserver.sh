@@ -35,12 +35,12 @@ kind: Config
 users:
 - name: controllermanager
   user:
-    client-certificate: /srv/kubernetes/cs_client.crt
-    client-key: /srv/kubernetes/cs_client.key
+    client-certificate: /srv/kubernetes/kubernetes.pem
+    client-key: /srv/kubernetes/kubernetes-key.pem
 clusters:
 - name: local
   cluster:
-    certificate-authority: /srv/kubernetes/ca.crt
+    certificate-authority: /srv/kubernetes/ca.pem
 contexts:
 - context:
     cluster: local
@@ -120,19 +120,19 @@ KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,NamespaceExists,L
 # --client-ca-file="": If set, any request presenting a client certificate signed
 # by one of the authorities in the client-ca-file is authenticated with an identity
 # corresponding to the CommonName of the client certificate.
-KUBE_API_CLIENT_CA_FILE="--client-ca-file=/srv/kubernetes/ca.crt"
+KUBE_API_CLIENT_CA_FILE="--client-ca-file=/srv/kubernetes/ca.pem"
 
 # --service-account-key-file="":服务账号文件，包含x509公私钥
-KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca.key"
+KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca-key.pem"
 
 # --tls-cert-file="": File containing x509 Certificate for HTTPS.  (CA cert, if any,
 # concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file
 # and --tls-private-key-file are not provided, a self-signed certificate and key are
 # generated for the public address and saved to /var/run/kubernetes.
-KUBE_API_TLS_CERT_FILE="--tls-cert-file=/srv/kubernetes/server.crt"
+KUBE_API_TLS_CERT_FILE="--tls-cert-file=/srv/kubernetes/kubernetes.pem"
 
 # --tls-private-key-file="": File containing x509 private key matching --tls-cert-file.
-KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/server.key"
+KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/kubernetes-key.pem"
 
 # --authorization-mode=RBAC
 KUBE_AUTHORIZATION_MODE="--authorization-mode=RBAC"

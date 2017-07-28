@@ -5,12 +5,6 @@ set -o nounset
 set -o pipefail
 
 
-KUBE_MASTER_IP=${1:-}
-KUBE_MASTER_DNS=${2:-}
-KUBE_CLUSTER_IP=${3:-"10.0.0.1"}
-KUBE_SSL_DIR=${4:-"/srv/kubernetes"}
-
-
 echo '============================================================'
 echo '===================Create ssl for kube master node...======='
 echo '============================================================'
@@ -134,14 +128,10 @@ cfssl gencert -ca=ca.pem \
 #cp {ca-key.pem,ca.pem,kubernetes-key.pem,kubernetes.pem,kube-proxy.pem,kube-proxy-key.pem,admin.pem,admin-key.pem} /opt/kubernetes/ssl
 
 
-
-#创建证书存放目录
-rm -rf ${KUBE_SSL_DIR}
-mkdir -p ${KUBE_SSL_DIR}
-cp {ca-key.pem,ca.pem,kubernetes-key.pem,kubernetes.pem} ${KUBE_SSL_DIR}
+mkdir -p /srv/kubernetes
+cp {ca-key.pem,ca.pem,kubernetes-key.pem,kubernetes.pem} /opt/kubernetes/ssl
 echo "Clean files..."
 rm -rf *.pem
 rm -rf *.json
-rm -rf *.csr
 
 

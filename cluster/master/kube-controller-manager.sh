@@ -18,17 +18,17 @@ echo "Create ${KUBE_CFG_DIR}/kube-controller-manager file"
 cat <<EOF >/opt/kubernetes/cfg/kube-controller-manager
 # --root-ca-file="": If set, this root certificate authority will be included in
 # service account's token secret. This must be a valid PEM-encoded CA bundle.
-KUBE_CONTROLLER_MANAGER_ROOT_CA_FILE="--root-ca-file=/srv/kubernetes/ca.crt"
+KUBE_CONTROLLER_MANAGER_ROOT_CA_FILE="--root-ca-file=/srv/kubernetes/ca.pem"
 
 # --service-account-private-key-file="": Filename containing a PEM-encoded private
 # RSA key used to sign service account tokens.
 KUBE_CONTROLLER_MANAGER_SERVICE_ACCOUNT_PRIVATE_KEY_FILE="--service-account-private-key-file=/srv/kubernetes/server.key"
 
 #--cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem
-KUBE_CLUSTER_SIGNING_CERT_FILE="--cluster-signing-cert-file=/srv/kubernetes/ca.crt"
+KUBE_CLUSTER_SIGNING_CERT_FILE="--cluster-signing-cert-file=/srv/kubernetes/ca.pem"
 
 #--cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem
-KUBE_CLUSTER_SIGNING_KEY_FILE="--cluster-signing-key-file=/srv/kubernetes/ca.key"
+KUBE_CLUSTER_SIGNING_KEY_FILE="--cluster-signing-key-file=/srv/kubernetes/ca-key.pem"
 
 # --leader-elect
 KUBE_LEADER_ELECT="--leader-elect=true"
