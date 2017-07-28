@@ -122,6 +122,9 @@ KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,NamespaceExists,L
 # corresponding to the CommonName of the client certificate.
 KUBE_API_CLIENT_CA_FILE="--client-ca-file=/srv/kubernetes/ca.crt"
 
+# --service-account-key-file="":服务账号文件，包含x509公私钥
+KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca.key"
+
 # --tls-cert-file="": File containing x509 Certificate for HTTPS.  (CA cert, if any,
 # concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file
 # and --tls-private-key-file are not provided, a self-signed certificate and key are
@@ -130,9 +133,6 @@ KUBE_API_TLS_CERT_FILE="--tls-cert-file=/srv/kubernetes/server.crt"
 
 # --tls-private-key-file="": File containing x509 private key matching --tls-cert-file.
 KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/server.key"
-
-# --service-account-key-file="":服务账号文件，包含x509 公私钥
-KUBE_SERVICE_ACCOUNT_KEY_FILE="--service-account-key-file=/srv/kubernetes/ca.key"
 
 # --authorization-mode=RBAC
 KUBE_AUTHORIZATION_MODE="--authorization-mode=RBAC"

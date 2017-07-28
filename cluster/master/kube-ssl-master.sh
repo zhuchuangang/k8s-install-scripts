@@ -23,7 +23,7 @@ mkdir /srv/kubernetes
 #创建CA私钥
 openssl genrsa -out /srv/kubernetes/ca.key 2048
 #自签CA
-openssl req -x509 -new -nodes -key /srv/kubernetes/ca.key -subj "/CN=kubernetes" -days 10000 -out /srv/kubernetes/ca.crt
+openssl req -x509 -new -nodes -key /srv/kubernetes/ca.key -subj "/CN=kubernetes/O=k8s/OU=System" -days 10000 -out /srv/kubernetes/ca.crt
 ###############生成 API Server 服务端证书和私钥###############
 
 cat <<EOF >/srv/kubernetes/master_ssl.cnf
@@ -50,7 +50,7 @@ echo "Create kubernetes api server ssl key..."
 openssl genrsa -out /srv/kubernetes/server.key 2048
 
 #生成签署请求
-openssl req -new -key /srv/kubernetes/server.key -subj "/CN=kube-apiserver" -config /srv/kubernetes/master_ssl.cnf -out /srv/kubernetes/server.csr
+openssl req -new -key /srv/kubernetes/server.key -subj "/CN=kubernetes/O=k8s/OU=System" -config /srv/kubernetes/master_ssl.cnf -out /srv/kubernetes/server.csr
 
 #使用自建CA签署
 openssl x509 -req -in /srv/kubernetes/server.csr -CA /srv/kubernetes/ca.crt -CAkey /srv/kubernetes/ca.key -CAcreateserial -days 10000 -extensions v3_req -extfile /srv/kubernetes/master_ssl.cnf -out /srv/kubernetes/server.crt
@@ -60,7 +60,7 @@ echo "Create kubernetes controller manager and scheduler server ssl key..."
 openssl genrsa -out /srv/kubernetes/cs_client.key 2048
 
 #生成签署请求
-openssl req -new -key /srv/kubernetes/cs_client.key -subj "/CN=kube-controller-manager" -out /srv/kubernetes/cs_client.csr
+openssl req -new -key /srv/kubernetes/cs_client.key -subj "/CN=admin/O=system:masters/OU=System" -out /srv/kubernetes/cs_client.csr
 
 #使用自建CA签署
 openssl x509 -req -in /srv/kubernetes/cs_client.csr -CA /srv/kubernetes/ca.crt -CAkey /srv/kubernetes/ca.key -CAcreateserial -out /srv/kubernetes/cs_client.crt -days 10000
