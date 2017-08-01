@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mysql
+  labels:
+    k8s-app: mysql
+spec:
+  replicas: 1
+  selector:
+    name: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        name: mysql
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysql
+          resources:
+            limits:
+              cpu: 100m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 500Mi
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data-storage
+              mountPath: /data
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+      volumes:
+        - name: mysql-data-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    name: mysql
+spec:
+  selector:
+    name: mysql
+  type: NodePort
+  ports:
+    - port: 3306
+      targetPort: 3306
+      nodePort: 30001
+
