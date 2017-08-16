@@ -1,0 +1,46 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  restartPolicy: Always
+  containers:
+    - image: nginx
+      name: nginx
+      ports:
+        - containerPort: 80
+
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: httpd-pod
+  labels:
+    app: nginx
+spec:
+  restartPolicy: Always
+  containers:
+    - name: httpd
+      image: httpd
+      ports:
+        - containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+  namespace: default
+spec:
+  selector:
+    app: nginx
+  type: NodePort
+  sessionAffinity: None
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
+      protocol: TCP
+

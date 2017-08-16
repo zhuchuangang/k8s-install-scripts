@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo-web
+  freemarker:
+    expose-request-attributes: true
+    expose-spring-macro-helpers: true
+    request-context-attribute: request
+    cache: false
+    settings:
+      auto_import: /spring.ftl as spring
+  resources:
+    chain:
+      enabled: true
+  redis:
+    host: 127.0.0.1
+    password: 123456
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/test?characterEncoding=utf-8
+    username: root
+    password: 123456
+    driver-class-name: org.mariadb.jdbc.Driver
+    initialSize: 10
+    maxActive: 20
+    minIdle: 1
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validation-query: select 1
+    test-while-idle: true
+
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+
+
+logging:
+  level:
+    com.szss: debug
+

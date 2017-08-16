@@ -1,0 +1,18 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: nginx
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: nginx-container
+          image: nginx
+          ports:
+            - containerPort: 80

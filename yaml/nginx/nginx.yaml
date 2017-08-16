@@ -1,0 +1,20 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  restartPolicy: Always
+  containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: nginx-storage
+          mountPath: /data/nginx
+  volumes:
+    - name: nginx-storage
+      emptyDir: {}

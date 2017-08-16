@@ -1,0 +1,57 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: host-storage
+provisioner: kubernetes.io/host-path
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      name: web
+  clusterIP: None
+---
+kind: StatefulSet
+apiVersion: apps/v1beta1
+metadata:
+  name: nginx-statefule
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  serviceName: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          imagePullPolicy: Always
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: www
+        annotations:
+          volume.beta.kubernetes.io/storage-class: host-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+
+
+
+

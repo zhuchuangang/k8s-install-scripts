@@ -1,0 +1,35 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: nginx-rc
+  labels:
+    app: nginx-rc-label
+spec:
+  replicas: 2
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: nginx
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000

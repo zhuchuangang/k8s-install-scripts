@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: web-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: web
+      labels:
+        app: web
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: web
+          image: szss/web:v1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.redis.host
+              value: redis.default.svc.cluster.local
+            - name: spring.redis.password
+              value: 123456
+            - name: spring.datasource.url
+              value: jdbc:mariadb://mysql.default.svc.cluster.local:3306/test?characterEncoding=utf-8
+            - name: spring.datasource.username
+              value: root
+            - name: spring.datasource.password
+              value: 123456
+

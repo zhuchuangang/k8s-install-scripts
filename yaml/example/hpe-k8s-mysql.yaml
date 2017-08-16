@@ -1,0 +1,55 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: my-storage
+provisioner: kubernetes.io/host-path
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-claim
+  annotations:
+    volume.beta.kubernetes.io/storage-class: my-storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hpe-k8s-mysql
+spec:
+  selector:
+    app: hpe-k8s-mysql
+  ports:
+    - port: 3306
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: hpe-k8s-mysql
+  labels:
+    app: hpe-k8s-mysql
+spec:
+  containers:
+    - name: hpe-k8s-mysql
+      image: mysql
+      volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: datavolume
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        - name: MYSQL_DATABASE
+          value: "HPE_APP"
+        - name: MYSQL_USER
+          value: "lession"
+        - name: MYSQL_PASSWORD
+          value: "mypass"
+  volumes:
+    - name: datavolume
+      persistentVolumeClaim:
+        claimName: my-claim

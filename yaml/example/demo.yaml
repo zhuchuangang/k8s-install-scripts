@@ -1,0 +1,38 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hpe-lession-web
+spec:
+  type: NodePort
+  #sessionAffinity: ClientIP
+  selector:
+    app: hpe-lession-web
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30082
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: hpe-lession-web
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hpe-lession-web
+    spec:
+      containers:
+        - name: hpe-lesssion-web
+          image: hpe_k8s_lession_image
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: mysql_ip
+              value: "hpe-k8s-mysql"
+            - name: user
+              value: "lession"
+            - name: password
+              value: "mypass"

@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hpe-k8s-mysql
+spec:
+  selector:
+    app: hpe-k8s-mysql
+  ports:
+    - port: 3306
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: hpe-k8s-mysql
+  labels:
+    app: hpe-k8s-mysql
+spec:
+  containers:
+    - name: hpe-k8s-mysql
+      image: mysql
+      volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: datavolume
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        - name: MYSQL_DATABASE
+          value: "HPE_APP"
+        - name: MYSQL_USER
+          value: "lession"
+        - name: MYSQL_PASSWORD
+          value: "mypass"
+  volumes:
+    - name: datavolume
+      hostPath:
+        path: /mysqldata
