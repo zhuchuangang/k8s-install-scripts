@@ -25,6 +25,10 @@ systemctl stop firewalld
 
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
+if [ ! -f "/proc/sys/net/bridge" ]; then
+    mkdir -p /proc/sys/net/bridge
+fi
+
 if [ ! -f "/proc/sys/net/bridge/bridge-nf-call-iptables" ]; then
     touch /proc/sys/net/bridge/bridge-nf-call-iptables
 fi
