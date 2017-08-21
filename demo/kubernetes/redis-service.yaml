@@ -5,6 +5,9 @@ metadata:
 spec:
   selector:
     app: redis
+  type: NodePort
   ports:
     - port: 6379
       name: redis-port
+      nodePort: 30007
+      targetPort: 6379

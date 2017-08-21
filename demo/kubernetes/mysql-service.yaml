@@ -5,8 +5,10 @@ metadata:
 spec:
   selector:
     app: mysql
-  clusterIP: None
+  type: NodePort
   ports:
     - port: 3306
       name: mysql-port
+      nodePort: 30006
+      targetPort: 3306
 

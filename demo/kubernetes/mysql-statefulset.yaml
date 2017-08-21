@@ -16,9 +16,15 @@ spec:
       restartPolicy: Always
       containers:
         - name: mysql
-          image: mysql:5.7.19
+          image: mariadb:10.1.26
           ports:
             - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
   volumeClaimTemplates:
     - metadata:
         name: mysql-storage
@@ -30,6 +36,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-
-
-

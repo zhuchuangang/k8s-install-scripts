@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: redis-client
+spec:
+  containers:
+    - name: redis
+      image: redis:4.0.1-alpine
+      ports:
+        - containerPort: 6379
+

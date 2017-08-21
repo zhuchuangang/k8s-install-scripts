@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>web</module>
+        <module>thrift-server</module>
     </modules>
 
     <properties>
