@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
       - name: kubernetes-dashboard
-        image: registry.cn-hangzhou.aliyuncs.com/kube_containers/kubernetes-dashboard-amd64:v1.6.1
+        image: registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.6.3
         ports:
         - containerPort: 9090
           protocol: TCP
@@ -68,8 +68,7 @@ spec:
           # Uncomment the following line to manually specify Kubernetes API server Host
           # If not specified, Dashboard will attempt to auto discover the API server and connect
           # to it. Uncomment only if the default does not work.
-          #- --apiserver-host=https://172.16.120.151:6443
-          #- --heapster-host=http://heapster.kube-system:80
+          # - --apiserver-host=http://my-address:port
         livenessProbe:
           httpGet:
             path: /
@@ -90,10 +89,8 @@ metadata:
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
-  type: NodePort
   ports:
   - port: 80
-    nodePort: 30080
     targetPort: 9090
   selector:
     k8s-app: kubernetes-dashboard
