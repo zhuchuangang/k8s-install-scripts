@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-controller-conf
+  namespace: nginx-ingress
+  labels:
+    app: nginx-ingress-lb
+data:
+  enable-vts-status: 'true'
