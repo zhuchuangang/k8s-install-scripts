@@ -236,6 +236,18 @@ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 echo "Config admin success!"
 
+
+echo '============================================================'
+echo '==============Create flannel service...====================='
+echo '============================================================'
+if [ -f "$HOME/kube-flannel.yml" ]; then
+  rm -rf $HOME/kube-flannel.yml
+fi
+wget -P $HOME/ https://raw.githubusercontent.com/coreos/flannel/${FLANNEL_VERSION}/Documentation/kube-flannel.yml
+sed -i 's/quay.io\/coreos\/flannel/registry.cn-hangzhou.aliyuncs.com\/szss_k8s\/flannel/g' $HOME/kube-flannel.yml
+kubectl --namespace kube-system apply -f $HOME/kube-flannel.yml
+echo "Flannel created!"
+
 fi
 #=========================master end===================================
 
@@ -251,16 +263,4 @@ kubeadm join --token ${KUBE_TOKEN} ${MASTER_ADDRESS}:6443 --skip-preflight-check
 echo "Join kubernetes cluster success!"
 fi
 #=========================slave end===================================
-
-
-echo '============================================================'
-echo '==============Create flannel service...====================='
-echo '============================================================'
-if [ -f "$HOME/kube-flannel.yml" ]; then
-  rm -rf $HOME/kube-flannel.yml
-fi
-wget -P $HOME/ https://raw.githubusercontent.com/coreos/flannel/${FLANNEL_VERSION}/Documentation/kube-flannel.yml
-sed -i 's/quay.io\/coreos\/flannel/registry.cn-hangzhou.aliyuncs.com\/szss_k8s\/flannel/g' $HOME/kube-flannel.yml
-kubectl --namespace kube-system apply -f $HOME/kube-flannel.yml
-echo "Flannel created!"
 

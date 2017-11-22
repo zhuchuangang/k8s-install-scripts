@@ -35,5 +35,8 @@ sh kubeadm.sh 172.16.120.151 master
 sh kubeadm.sh 172.16.120.151 slave
 ```
 
+# 4.重置脚本
+kubeadm-reset.sh为重置脚本
+
 
 参考：https://www.kubernetes.org.cn/2906.html
