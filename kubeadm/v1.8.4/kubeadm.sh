@@ -172,6 +172,7 @@ echo '============================================================'
 echo '==============Start docker and kubelet services...=========='
 echo '============================================================'
 systemctl daemon-reload
+systemctl enable docker
 systemctl enable kubelet
 systemctl start docker
 systemctl start kubelet
