@@ -23,7 +23,7 @@ KUBE_IMAGE_VERSION=v1.8.4
 KUBE_PAUSE_VERSION=3.0
 ETCD_VERSION=3.0.17
 FLANNEL_VERSION=v0.9.1
-DNS_VERSION=1.14.4
+DNS_VERSION=1.14.5
 
 echo '============================================================'
 echo '====================Disable selinux and firewalld...========'
