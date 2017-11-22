@@ -220,7 +220,13 @@ export KUBE_REPO_PREFIX="registry.cn-hangzhou.aliyuncs.com/szss_k8s"
 #--pod-network-cidr表示pod网络的IP
 # 其他更多参数请通过kubeadm init --help查看
 # 参考：https://kubernetes.io/docs/reference/generated/kubeadm/
-kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} --kubernetes-version=v${KUBE_VERSION} --token=${KUBE_TOKEN} --token-ttl=0 service-cidr=10.96.0.0/12 --pod-network-cidr=10.244.0.0/16 --skip-preflight-checks
+kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} \
+--kubernetes-version=v${KUBE_VERSION} \
+--token=${KUBE_TOKEN} \
+--token-ttl=0 \
+service-cidr=10.96.0.0/12 \
+--pod-network-cidr=10.244.0.0/16 \
+--skip-preflight-checks
 
 #查看token的命令
 echo "you can use this order to query the token: kubeadm token list"
