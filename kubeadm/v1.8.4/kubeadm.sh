@@ -212,9 +212,15 @@ echo "init kubernetes master..."
 #export KUBE_HYPERKUBE_IMAGE="registry.cn-hangzhou.aliyuncs.com/szss_quay_io/coreos-hyperkube:${HYPERKUBE_VERSION}"
 export KUBE_ETCD_IMAGE="registry.cn-hangzhou.aliyuncs.com/szss_k8s/etcd-amd64:${ETCD_VERSION}"
 export KUBE_REPO_PREFIX="registry.cn-hangzhou.aliyuncs.com/szss_k8s"
-#--pod-network-cidr指定IP段需要和kube-flannel.yml文件中配置的一致
+
 #--token指定token,token的格式为<6 character string>.<16 character string>，指定token后可以通过cat /etc/kubernetes/pki/tokens.csv查看
-kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} --kubernetes-version=v${KUBE_VERSION} --token=${KUBE_TOKEN} --pod-network-cidr=10.244.0.0/16 --skip-preflight-checks
+#--token-ttl=0 token-ttl表示token过期时间，0表示永远不过期
+#--pod-network-cidr指定IP段需要和kube-flannel.yml文件中配置的一致
+#--service-cidr表示service VIP
+#--pod-network-cidr表示pod网络的IP
+# 其他更多参数请通过kubeadm init --help查看
+# 参考：https://kubernetes.io/docs/reference/generated/kubeadm/
+kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} --kubernetes-version=v${KUBE_VERSION} --token=${KUBE_TOKEN} --token-ttl=0 service-cidr=10.96.0.0/12 --pod-network-cidr=10.244.0.0/16 --skip-preflight-checks
 
 #查看token的命令
 echo "you can use this order to query the token: kubeadm token list"
