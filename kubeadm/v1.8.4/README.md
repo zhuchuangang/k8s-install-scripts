@@ -38,6 +38,15 @@ sh kubeadm.sh 172.16.120.151 slave
 # 4.重置脚本
 kubeadm-reset.sh为重置脚本
 
+# 5.静态pod
+kubeadm安装的所有组件都是以静态pod的形式通过kubelet启动的。
+有关静态pod的内容请查阅https://kubernetes.io/cn/docs/tasks/administer-cluster/static-pod/
 
-参考：https://www.kubernetes.org.cn/2906.html
 
+
+参考：
+
+https://www.kubernetes.org.cn/2906.html
+
+
+https://blog.frognew.com/2017/09/kubeadm-install-kubernetes-1.8.html

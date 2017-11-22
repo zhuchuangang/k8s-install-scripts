@@ -1,5 +1,14 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# NODE_TYPE表示节点类型，取值为master,slave
+NODE_TYPE=${1:-"master"}
+DOCKER_MIRRORS=${2:-"https://5md0553g.mirror.aliyuncs.com"}
+DOCKER_GRAPH=${3:-"/mnt/docker"}
+
 RANCHER_VERSION=v1.6.11
 
 echo '============================================================'
@@ -85,9 +94,10 @@ echo '============================================================'
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
-echo "The docker and kubelet services started"
+echo "The docker services started!"
 
 
+if [ "$NODE_TYPE" = 'master' ]; then
 echo '============================================================'
 echo '====================Start rancher server...================='
 echo '============================================================'
@@ -95,3 +105,4 @@ echo '============================================================'
 docker run -d --restart always --name rancher-server -p 8080:8080 rancher/server:${RANCHER_VERSION=}
 
 echo "Rancher server start success!"
+fi
