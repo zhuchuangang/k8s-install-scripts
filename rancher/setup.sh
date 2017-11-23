@@ -102,7 +102,10 @@ echo '============================================================'
 echo '====================Start rancher server...================='
 echo '============================================================'
 
-docker run -d --restart always --name rancher-server -p 8080:8080 rancher/server:${RANCHER_VERSION=}
+docker run -d --restart always \
+--name rancher-server \
+-p 8080:8080 \
+rancher/server:${RANCHER_VERSION}
 
 echo "Rancher server start success!"
 fi
