@@ -97,6 +97,7 @@ systemctl start docker
 echo "The docker services started!"
 
 
+# master节点启动rancher server，slave节点只安装docker环境
 if [ "$NODE_TYPE" = 'master' ]; then
 echo '============================================================'
 echo '====================Start rancher server...================='
