@@ -29,7 +29,7 @@ sh setup.sh slave
 
 # 3 rancher上部署kubernetes
 
-master节点安装完成后，参考【原生加速中国区Kubernetes安装】https://www.cnrancher.com/kubernetes-installation/ 安装kubernetes。
+master节点安装完成后，添加节点时主机连接Rancher API的Base URL请使用内网地址，参考【原生加速中国区Kubernetes安装】https://www.cnrancher.com/kubernetes-installation/ 安装kubernetes。
 
 
 从rancher页面生成kubeconfig配置文件，保存到master节点~/.kube/config文件中，下载kubectl文件到master节点/usr/bin目录，设置文件为可执行文件 chmoc a+x /usr/bin/kubectl。kubectl已经上传到百度网盘 https://pan.baidu.com/s/1jH9dsF0 
