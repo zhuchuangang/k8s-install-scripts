@@ -18,9 +18,9 @@ cp kubedns-controller.yaml.sed kubedns-controller.yaml
 sed -i 's/$DNS_DOMAIN/cluster.local./g' kubedns-controller.yaml
 ```
 由于gcr.io进行下载问题，对kubedns-controller.yaml使用的docker镜像进行了替换，
-- gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.4镜像改为hub.c.163.com/k8s163/k8s-dns-kube-dns-amd64:1.14.1
-- gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.4镜像改为hub.c.163.com/k8s163/k8s-dns-dnsmasq-nanny-amd64:1.14.1
-- gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.4镜像改为hub.c.163.com/k8s163/k8s-dns-sidecar-amd64:1.14.1
+- gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.4镜像改为registry.cn-hangzhou.aliyuncs.com/szss_k8s/k8s-dns-kube-dns-amd64:1.14.5
+- gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.4镜像改为registry.cn-hangzhou.aliyuncs.com/szss_k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.5
+- gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.4镜像改为registry.cn-hangzhou.aliyuncs.com/szss_k8s/k8s-dns-sidecar-amd64:1.14.5
 
 
 # 4.启动kubedns服务
