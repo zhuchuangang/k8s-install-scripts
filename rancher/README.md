@@ -18,13 +18,13 @@ sh setup.sh slave
 
 master节点执行下面的命令，master节点除了安装docker环境，还安装mariadb和rancher server：
 ```bash
-sh setup.sh master 192.168.0.1
+sh setup-db.sh master 192.168.0.1
 ```
 > 注意：192.168.0.1为master节点IP
 
 slave节点执行下面命令，slave节点只安装docker环境：
 ```bash
-sh setup.sh slave
+sh setup-db.sh slave
 ```
 
 # 3 rancher上部署kubernetes
