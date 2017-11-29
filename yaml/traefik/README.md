@@ -52,6 +52,9 @@ traefik的控制台web ui外部映射执行ui.yaml配置文件即可。
 
 官方文档：
 https://docs.traefik.io/user-guide/kubernetes/
+
 参考：
 https://mritd.me/2016/12/06/try-traefik-on-kubernetes/
 
+https证书配置：
+https://medium.com/@patrickeasters/using-traefik-with-tls-on-kubernetes-cb67fb43a948
