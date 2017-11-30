@@ -347,3 +347,5 @@ http://blog.csdn.net/heivy/article/details/50617385
 【用内核驱动挂载 CEPH 文件系统】http://docs.ceph.org.cn/cephfs/kernel/
 
 【删除osd】http://www.jianshu.com/p/a104d156f120
+
+【Ceph性能优化总结】http://xiaoquqi.github.io/blog/2015/06/28/ceph-performance-optimization-summary/
