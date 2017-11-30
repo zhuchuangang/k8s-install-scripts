@@ -27,7 +27,16 @@ slave节点执行下面命令，slave节点只安装docker环境：
 sh setup-db.sh slave
 ```
 
-# 3 rancher上部署kubernetes
+# 3 rancher HA
+rancher高可用至少要3个节点。
+```bash
+sh setup-db.sh master 192.168.0.1 192.168.0.10
+```
+192.168.0.1为当前节点IP
+192.168.0.10为mysql数据库IP
+
+
+# 4 rancher上部署kubernetes
 
 master节点安装完成后，添加节点时主机连接Rancher API的Base URL请使用内网地址，参考【原生加速中国区Kubernetes安装】https://www.cnrancher.com/kubernetes-installation/ 安装kubernetes。
 
