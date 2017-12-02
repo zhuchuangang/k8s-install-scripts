@@ -62,3 +62,8 @@ rancher提供关闭自动安装kubernetes addones的选项，dashboard、dns等�
 kubectl label nodes k8s-master01 node-role.kubernetes.io/master=
 kubectl taint nodes k8s-master01 node-role.kubernetes.io/master=:NoSchedule
 ```
+
+参考：
+【rancher server的安装】http://rancher.com/docs/rancher/v1.6/zh/installing-rancher/installing-server/
+
+【rancher server的升级】http://rancher.com/docs/rancher/v1.6/zh/upgrading/
