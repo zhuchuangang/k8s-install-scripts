@@ -35,8 +35,12 @@ sh setup-db.sh master 192.168.0.1 192.168.0.10
 192.168.0.1为当前节点IP
 192.168.0.10为mysql数据库IP
 
+# 4 rancher HA模式添加rancher主节点作为host需要配置负载均衡
+使用setup-db.sh构建一个rancher集群，如果需要将rancher主节点添加为host，需要在每个主节点在部署一个nginx用于负载3个主节点，rancher界面添加每个rancher节点之前需要修改主机注册URL，该URL为该主机的IP加本机运行的nginx端口号。
+删除添加的主节点时不要点击疏散该节点，这样会导致rancher-server被停止。
 
-# 4 rancher上部署kubernetes
+添加子节点也可以使用上面的方式，如果在阿里云，可以使用SLB服务对三个主节点做内网负载，但是SLB的地址服务用来添加rancher主节点作为host.
+# 5 rancher上部署kubernetes
 
 master节点安装完成后，添加节点时主机连接Rancher API的Base URL请使用内网地址，参考【原生加速中国区Kubernetes安装】https://www.cnrancher.com/kubernetes-installation/ 安装kubernetes。
 
@@ -50,5 +54,5 @@ rancher提供关闭自动安装kubernetes addones的选项，dashboard、dns等�
 
 【Installing Rancher Server】http://rancher.com/docs/rancher/latest/en/installing-rancher/installing-server/#multi-nodes
 
-# 4 安装重置
+# 6 安装重置
 先在rancher界面删除所有节点，再在每个节点执行reset.sh脚步。

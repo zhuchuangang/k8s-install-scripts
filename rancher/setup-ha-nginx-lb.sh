@@ -24,8 +24,6 @@ for server in $RANCHER_SERVER;do
     NGINX_RANCHER_SERVER=$NGINX_RANCHER_SERVER"server "$server";";
 done
 
-echo $NGINX_RANCHER_SERVER
-
 cat > /etc/nginx/nginx.conf <<EOF
 #user  nobody;
 worker_processes  4;
@@ -106,3 +104,10 @@ http {
 
 }
 EOF
+
+
+docker run -d --restart always \
+    --name rancher-nginx-lb \
+    -p $NGINX_PORT:$NGINX_PORT \
+    -v /etc/nginx/nginx.conf:/etc/nginx/nginx.conf \
+    -d nginx
