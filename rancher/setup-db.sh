@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#sh setup-db.sh master 192.168.0.1
+
 set -o errexit
 set -o nounset
 set -o pipefail
