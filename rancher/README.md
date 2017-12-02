@@ -56,3 +56,9 @@ rancher提供关闭自动安装kubernetes addones的选项，dashboard、dns等�
 
 # 6 安装重置
 先在rancher界面删除所有节点，再在每个节点执行reset.sh脚步。
+
+# 7 主节点不做pod调度
+```bash
+kubectl label nodes k8s-master01 node-role.kubernetes.io/master=
+kubectl taint nodes k8s-master01 node-role.kubernetes.io/master=:NoSchedule
+```
