@@ -20,8 +20,8 @@ hostnamectl --static set-hostname  node01
 kubeadm-master.sh和kubeadm-node.sh脚本采用kubeadm进行安装，采用国内镜像，安装简单快速。
 
 ```bash
-chmod a+x kubeadm-master.sh
-chmod a+x kubeadm-node.sh
+chmod a+x kubeadm.sh
+chmod a+x kubeadm-reset.sh
 ```
 
 
