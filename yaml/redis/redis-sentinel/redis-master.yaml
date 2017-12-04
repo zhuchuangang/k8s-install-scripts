@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master
+  labels:
+    app: redis-master
+spec:
+  ports:
+  - port: 6379
+    name: redis-master
+  selector:
+    app: redis-master
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: redis-master
+spec:
+  serviceName: redis-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-server
+    spec:
+      containers:
+        - name: redis-server
+          image: redis:4.0.5
+          command:
+            - redis-server
+          args:
+            - /usr/local/etc/redis/redis-master.conf
+          ports:
+            - containerPort: 6379
+              name: redis-server
+          readinessProbe:
+            exec:
+              command: ['redis-cli', 'info', 'server']
+          volumeMounts:
+            - name: redis-server-volume
+              mountPath: /data
+            - name: redis-conf
+              mountPath: /usr/local/etc/redis
+      volumes:
+        - name: redis-server-volume
+          emptyDir: {}
+        - name: redis-conf
+          configMap:
+            name: redis-cm
+            items:
+              - key: redis-master.conf
+                path: redis-master.conf
