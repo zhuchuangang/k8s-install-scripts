@@ -9,9 +9,11 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
     kubernetes.io/name: "Kibana"
 spec:
+  type: NodePort
   ports:
   - port: 5601
     protocol: TCP
+    nodePort: 30010
     targetPort: ui
   selector:
     k8s-app: kibana-logging
