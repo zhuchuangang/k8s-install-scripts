@@ -1,5 +1,5 @@
 kubernetes v1.8.4阿里云yum源没有同步，现在已经分享到baidu网盘https://pan.baidu.com/s/1c1VAeli,
-下载kubectl、kubeadm、kubelet、kubernetes-cni、socat。和kubeadm-master.sh或者kubeadm-node.sh脚本放在同一目录下。
+下载kubectl、kubeadm、kubelet、kubernetes-cni、socat。和kubeadm.sh或者kubeadm-reset.sh脚本放在同一目录下。
 
 # 1 环境
 
