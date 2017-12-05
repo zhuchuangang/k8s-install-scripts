@@ -125,7 +125,7 @@ redis-server /etc/sentinel.conf --sentinel
 和普通Service相比，Headless Service没有ClusterIP(所以没有负载均衡),它会给一个集群内部的每个成员提供一个唯一的DNS域名来
 作为每个成员的网络标识，集群内部成员之间使用域名通信。无头服务管理的域名是如下的格式：$(service_name).$(k8s_namespace).svc.cluster.local。
 
-如果本实例脚本中的redis-master服务可以通过redis-master-0、redis-master-0.default、redis-master-0.default.svc.cluster.local等dns名称访问。
+如果本实例脚本中的redis-master服务可以通过redis-master-0、redis-master-0.redis-master.default、redis-master-0.redis-master.default.svc.cluster.local等dns名称访问。
 
 ### 2.3.2 非亲和调度
 ```bash
