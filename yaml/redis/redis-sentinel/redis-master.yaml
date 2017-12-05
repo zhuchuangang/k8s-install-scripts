@@ -5,6 +5,7 @@ metadata:
   labels:
     app: redis-master
 spec:
+  clusterIP: None
   ports:
   - port: 6379
     name: redis-master
@@ -24,7 +25,7 @@ spec:
         app: redis-server
     spec:
       containers:
-        - name: redis-server
+        - name: redis-master
           image: redis:4.0.5
           command:
             - redis-server
@@ -35,7 +36,7 @@ spec:
               name: redis-server
           readinessProbe:
             exec:
-              command: ['redis-cli', 'info', 'server']
+              command: ['redis-cli','-a','123456', 'info', 'server']
           volumeMounts:
             - name: redis-server-volume
               mountPath: /data

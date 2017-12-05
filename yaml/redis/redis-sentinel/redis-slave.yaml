@@ -5,6 +5,7 @@ metadata:
   labels:
     app: redis-slave
 spec:
+  clusterIP: None
   ports:
   - port: 6379
     name: redis-slave
@@ -17,7 +18,7 @@ metadata:
   name: redis-slave
 spec:
   serviceName: redis-slave
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -32,10 +33,10 @@ spec:
             - /usr/local/etc/redis/redis-slave.conf
           ports:
             - containerPort: 6379
-              name: redis-server
+              name: redis-slave
           readinessProbe:
             exec:
-              command: ['redis-cli', 'info', 'server']
+              command: ['redis-cli','-a','123456', 'info', 'server']
           volumeMounts:
             - name: redis-server-volume
               mountPath: /data
