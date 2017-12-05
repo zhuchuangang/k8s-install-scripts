@@ -38,16 +38,14 @@ spec:
             exec:
               command: ['redis-cli','-a','123456', 'info', 'server']
           volumeMounts:
-            - name: redis-server-volume
+            - name: redis-master-volume
               mountPath: /data
             - name: redis-conf
               mountPath: /usr/local/etc/redis
       volumes:
-        - name: redis-server-volume
-          emptyDir: {}
         - name: redis-conf
           configMap:
-            name: redis-cm
+            name: redis-server-cm
             items:
               - key: redis-master.conf
                 path: redis-master.conf
@@ -64,3 +62,13 @@ spec:
                         - redis-master
                         - redis-slave
                 topologyKey: kubernetes.io/hostname
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-master-volume
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "aliyun-nas"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi

@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: redis-cm
+  name: redis-server-cm
 data:
   redis-master.conf: |
     requirepass 123456

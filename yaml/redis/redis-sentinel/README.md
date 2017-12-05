@@ -145,7 +145,10 @@ redis-server /etc/sentinel.conf --sentinel
 ```
 上面的配置表示，如果配置了该调度配置的pod，不能和它的label,key=app,且值为redis-master/redis-salve的pod部署在同一台机器或拓扑内。
 
-### 2.3.3 测试
+### 2.3.3 存储
+该脚本需要配合storage-class目录下的脚本使用，storage-class创建了一个阿里云nas存储类。
+
+### 2.3.4 测试
 集群运行起来之后，进入redis-sentinel容器，执行下面的命令，获取sentinel集群信息：
 ```bash
 redis-cli -p 26379 info Sentinel

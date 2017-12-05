@@ -36,16 +36,15 @@ spec:
             - containerPort: 26379
               name: redis-sentinel
           volumeMounts:
-            - name: redis-server-volume
+            - name: redis-sentinel-volume
               mountPath: /data
             - name: redis-conf
               mountPath: /usr/local/etc/redis
       volumes:
-        - name: redis-server-volume
-          emptyDir: {}
+        - name: redis-sentinel-volume
         - name: redis-conf
           configMap:
-            name: redis-cm
+            name: redis-server-cm
             items:
               - key: sentinel.conf
                 path: sentinel.conf
@@ -61,3 +60,13 @@ spec:
                       values:
                         - redis-sentinel
                 topologyKey: kubernetes.io/hostname
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-sentinel-volume
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "aliyun-nas"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
