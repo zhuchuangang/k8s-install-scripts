@@ -51,3 +51,16 @@ spec:
             items:
               - key: redis-slave.conf
                 path: redis-slave.conf
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - redis-master
+                        - redis-slave
+                topologyKey: kubernetes.io/hostname

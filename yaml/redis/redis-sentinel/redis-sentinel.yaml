@@ -49,3 +49,15 @@ spec:
             items:
               - key: sentinel.conf
                 path: sentinel.conf
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - redis-sentinel
+                topologyKey: kubernetes.io/hostname

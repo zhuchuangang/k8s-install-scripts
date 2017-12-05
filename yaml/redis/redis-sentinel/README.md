@@ -119,6 +119,66 @@ redis-server /etc/sentinel.conf --sentinel
 **哨兵节点至少配置2个以上。SENTINEL_QUORUM的数量需要根据哨兵节点的数量而定，一般为哨兵节点数量减1。**
 
 
+## 2.3 kubernetes配置要点
+### 2.3.1 使用StatefulSet进行部署
+要定义一个服务(Service)为无头服务(Headless Service)，需要把Service定义中的ClusterIP配置项设置为空: spec.clusterIP:None。
+和普通Service相比，Headless Service没有ClusterIP(所以没有负载均衡),它会给一个集群内部的每个成员提供一个唯一的DNS域名来
+作为每个成员的网络标识，集群内部成员之间使用域名通信。无头服务管理的域名是如下的格式：$(service_name).$(k8s_namespace).svc.cluster.local。
+
+如果本实例脚本中的redis-master服务可以通过redis-master-0、redis-master-0.default、redis-master-0.default.svc.cluster.local等dns名称访问。
+
+### 2.3.2 非亲和调度
+```bash
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - redis-master
+                        - redis-slave
+                topologyKey: kubernetes.io/hostname
+```
+上面的配置表示，如果配置了该调度配置的pod，不能和它的label,key=app,且值为redis-master/redis-salve的pod部署在同一台机器或拓扑内。
+
+### 2.3.3 测试
+集群运行起来之后，进入redis-sentinel容器，执行下面的命令，获取sentinel集群信息：
+```bash
+redis-cli -p 26379 info Sentinel
+```
+执行结果如下：
+```bash
+# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=10.42.25.251:6379,slaves=2,sentinels=3
+```
+此时master节点的ip为10.42.25.251。
+
+然后删除redis-master的pod节点，随后kubernetes会重新启动一个新的redis-master的pod节点，稍等片刻后，在redis-sentinel容器，执行下面的命令，获取sentinel集群信息：
+```bash
+redis-cli -p 26379 info Sentinel
+```
+执行结果如下：
+```bash
+# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=10.42.78.28:6379,slaves=2,sentinels=3
+```
+此时的master节点已经发生变化，ip为10.42.78.28，其中一个slave节点晋升为master节点。
+
+
 参考：
 
 【使用Docker Compose部署基于Sentinel的高可用Redis集群】https://yq.aliyun.com/articles/57953
