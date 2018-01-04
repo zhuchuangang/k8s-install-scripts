@@ -121,7 +121,7 @@ export KUBE_REPO_PREFIX="registry.cn-hangzhou.aliyuncs.com/szss_k8s"
 export KUBE_ETCD_IMAGE="registry.cn-hangzhou.aliyuncs.com/szss_k8s/etcd-amd64:${ETCD_VERSION}"
 #--pod-network-cidr指定IP段需要和kube-flannel.yml文件中配置的一致
 #--token指定token,token的格式为<6 character string>.<16 character string>，指定token后可以通过cat /etc/kubernetes/pki/tokens.csv查看
-kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} --kubernetes-version=v${KUBE_VERSION} --token=${KUBE_TOKEN} --pod-network-cidr=10.244.0.0/12
+kubeadm init --apiserver-advertise-address=${MASTER_ADDRESS} --kubernetes-version=v${KUBE_VERSION} --token=${KUBE_TOKEN} --pod-network-cidr=10.244.0.0/16
 
 #查看token的命令
 echo "you can use this order to query the token: kubeadm token list"
