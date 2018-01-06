@@ -1,0 +1,27 @@
+version: "2"
+services:
+  mariadb:
+    image: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=test
+  redis:
+    image: redis:4.0.5
+    restart: always
+    ports:
+      - "6379:6379"
+  demo-web:
+    image: szss/web
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - MY_REDIS_HOST=redis
+      - MY_REDIS_PORT=6379
+      - MY_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/test?characterEncoding=utf-8
+      - MY_DATASOURCE_USERNAME=root
+      - MY_DATASOURCE_PASSWORD=123456
+
