@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-master
+  labels:
+    redis-sentinel: "true"
+spec:
+  containers:
+  - name: redis-master
+    image: registry.cn-hangzhou.aliyuncs.com/szss/redis:4.0.6
+    imagePullPolicy: Always
+    env:
+      - name: MASTER
+        value: "true"
+      - name: PASSWORD
+        value: "123456"
+    ports:
+      - containerPort: 6379
+        name: redis-server
+    readinessProbe:
+      exec:
+        command: ['redis-cli','-a','123456', 'info', 'server']
+  - name: redis-sentinel
+    image: registry.cn-hangzhou.aliyuncs.com/szss/redis:4.0.6
+    imagePullPolicy: Always
+    env:
+      - name: SENTINEL
+        value: "true"
+      - name: PASSWORD
+        value: "123456"
+    ports:
+      - containerPort: 26379
+        name: redis-sentinel
+    readinessProbe:
+      exec:
+        command: ['redis-cli','-p','26379', 'info', 'server']
+
+

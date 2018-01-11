@@ -1,0 +1,38 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: redis-sentinel
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: redis-sentinel
+        redis-sentinel: "true"
+    spec:
+      containers:
+        - name: redis-sentinel
+          image: registry.cn-hangzhou.aliyuncs.com/szss/redis:4.0.6
+          imagePullPolicy: Always
+          env:
+            - name: SENTINEL
+              value: "true"
+            - name: PASSWORD
+              value: "123456"
+          ports:
+            - containerPort: 26379
+              name: redis-sentinel
+      volumes:
+        - name: redis-sentinel-storage
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - redis-sentinel
+                topologyKey: kubernetes.io/hostname

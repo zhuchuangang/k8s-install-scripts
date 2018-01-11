@@ -1,24 +1,10 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-slave
-  labels:
-    app: redis-slave
-spec:
-  clusterIP: None
-  ports:
-  - port: 6379
-    name: redis-slave
-  selector:
-    app: redis-slave
----
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: redis-slave
 spec:
   serviceName: redis-slave
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
@@ -26,11 +12,11 @@ spec:
     spec:
       containers:
         - name: redis-slave
-          image: redis:4.0.5
-          command:
-            - redis-server
-          args:
-            - /usr/local/etc/redis/redis-slave.conf
+          image: registry.cn-hangzhou.aliyuncs.com/szss/redis:4.0.6
+          imagePullPolicy: Always
+          env:
+            - name: PASSWORD
+              value: "123456"
           ports:
             - containerPort: 6379
               name: redis-slave
@@ -38,18 +24,10 @@ spec:
             exec:
               command: ['redis-cli','-a','123456', 'info', 'server']
           volumeMounts:
-            - name: redis-slave-volume
+            - name: redis-slave-storage
               mountPath: /data
-            - name: redis-conf
-              mountPath: /usr/local/etc/redis
       volumes:
-        - name: redis-slave-volume
-        - name: redis-conf
-          configMap:
-            name: redis-server-cm
-            items:
-              - key: redis-slave.conf
-                path: redis-slave.conf
+        - name: redis-slave-storage
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -60,12 +38,11 @@ spec:
                     - key: app
                       operator: In
                       values:
-                        - redis-master
                         - redis-slave
                 topologyKey: kubernetes.io/hostname
   volumeClaimTemplates:
     - metadata:
-        name: redis-salve-volume
+        name: redis-slave-storage
         annotations:
           volume.beta.kubernetes.io/storage-class: "aliyun-nas"
       spec:
