@@ -430,6 +430,7 @@ repl_backlog_histlen:279458
 
 # 7 kubernetes脚本
 
+redis sentinel集群的kubernetes脚本从下面地址查看：
 https://github.com/zhuchuangang/k8s-install-scripts/tree/master/yaml/redis/redis-sentinel
 
 ## 7.1 Dockerfile
