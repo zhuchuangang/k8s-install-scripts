@@ -42,6 +42,13 @@ kubeadm-reset.sh为重置脚本
 kubeadm安装的所有组件都是以静态pod的形式通过kubelet启动的。
 有关静态pod的内容请查阅https://kubernetes.io/cn/docs/tasks/administer-cluster/static-pod/
 
+# 6.异常处理
+如果机器重启之后，集群启动失败，kubelet启动报错，可使用
+```bash
+cat /var/log/messages
+```
+命令查看是否是因为swap没有关闭，造成启动失败。如果是因为swap没有关闭，可注释/etc/fstab中和swap相关的配置，再重启主机，集群可正常启动。
+
 
 
 参考：

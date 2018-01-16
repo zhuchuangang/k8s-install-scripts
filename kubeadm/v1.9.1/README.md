@@ -25,3 +25,9 @@ sh kubeadm.sh --node-type node --master-address 172.16.120.191
 ```bash
 sh kubeadm.sh reset
 ```
+
+如果机器重启之后，集群启动失败，kubelet启动报错，可使用
+```bash
+cat /var/log/messages
+```
+命令查看是否是因为swap没有关闭，造成启动失败。如果是因为swap没有关闭，可注释/etc/fstab中和swap相关的配置，再重启主机，集群可正常启动。
