@@ -56,11 +56,11 @@ docker_install()
     # dockerproject docker源
     if [ ! -f "/etc/yum.repos.d/docker.repo" ]; then
     cat >> /etc/yum.repos.d/docker.repo <<EOF
-    [docker-repo]
-    name=Docker Repository
-    baseurl=https://yum.dockerproject.org/repo/main/centos/7
-    enabled=1
-    gpgcheck=0
+[docker-repo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7
+enabled=1
+gpgcheck=0
 EOF
     fi
     #查看docker版本
@@ -85,10 +85,10 @@ EOF
      rm -rf /etc/docker/daemon.json
     fi
     cat > /etc/docker/daemon.json <<EOF
-    {
-      "registry-mirrors": ["${DOCKER_MIRRORS}"],
-      "graph":"${DOCKER_GRAPH}"
-    }
+{
+    "registry-mirrors": ["${DOCKER_MIRRORS}"],
+    "graph":"${DOCKER_GRAPH}"
+}
 EOF
     echo "Config docker success!"
     systemctl daemon-reload
@@ -158,9 +158,9 @@ kube_install()
     # net.bridge.bridge-nf-call-iptables = 1
     # 设置swappiness参数为0，linux swap空间为0
     cat >> /etc/sysctl.d/k8s.conf <<EOF
-    net.bridge.bridge-nf-call-ip6tables = 1
-    net.bridge.bridge-nf-call-iptables = 1
-    vm.swappiness=0
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+vm.swappiness=0
 EOF
     modprobe br_netfilter
     # 生效配置
