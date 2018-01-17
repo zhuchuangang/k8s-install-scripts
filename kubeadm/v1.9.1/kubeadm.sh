@@ -54,7 +54,9 @@ firewalld_stop()
 docker_install()
 {
     # dockerproject docker源
-    if [ ! -f "/etc/yum.repos.d/docker.repo" ]; then
+    if [ -f "/etc/yum.repos.d/docker.repo" ]; then
+        rm -rf /etc/yum.repos.d/docker.repo
+    fi
     cat >> /etc/yum.repos.d/docker.repo <<EOF
 [docker-repo]
 name=Docker Repository
@@ -62,7 +64,7 @@ baseurl=https://yum.dockerproject.org/repo/main/centos/7
 enabled=1
 gpgcheck=0
 EOF
-    fi
+
     #查看docker版本
     #yum list docker-engine showduplicates
     #安装docker
