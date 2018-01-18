@@ -6,6 +6,13 @@
 | node01        | 172.16.120.192|
 
 
+
+修改主机名
+```bash
+hostnamectl --static set-hostname  master
+hostnamectl --static set-hostname  node01
+```
+
 下载kubeadm.sh脚本，设置脚本有可执行权限
 ```bash
 chmod a+x kubeadm.sh
