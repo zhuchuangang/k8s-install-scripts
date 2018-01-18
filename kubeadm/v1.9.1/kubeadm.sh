@@ -54,10 +54,7 @@ firewalld_stop()
 docker_install()
 {
     # dockerproject docker源
-    if [ -f "/etc/yum.repos.d/docker.repo" ]; then
-        rm -rf /etc/yum.repos.d/docker.repo
-    fi
-    cat >> /etc/yum.repos.d/docker.repo <<EOF
+    cat > /etc/yum.repos.d/docker.repo <<EOF
 [docker-repo]
 name=Docker Repository
 baseurl=https://yum.dockerproject.org/repo/main/centos/7
@@ -83,9 +80,6 @@ EOF
      mkdir -p /etc/docker
     fi
     # 配置加速器
-    if [ -f "/etc/docker/daemon.json" ]; then
-     rm -rf /etc/docker/daemon.json
-    fi
     cat > /etc/docker/daemon.json <<EOF
 {
     "registry-mirrors": ["${DOCKER_MIRRORS}"],
@@ -152,9 +146,7 @@ kube_install()
     # 修改 /etc/fstab 文件，注释掉 SWAP 的自动挂载，使用free -m确认swap已经关闭。
     swapoff -a
     echo "Swap off success!"
-    if [ -f "/etc/sysctl.d/k8s.conf" ]; then
-     rm -rf /etc/sysctl.d/k8s.conf
-    fi
+
     # IPv4 iptables 链设置 CNI插件需要
     # net.bridge.bridge-nf-call-ip6tables = 1
     # net.bridge.bridge-nf-call-iptables = 1
@@ -196,12 +188,11 @@ EOF
     echo "config --pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
 
     export KUBE_PAUSE_IMAGE=${KUBE_REPO_PREFIX}"/pause-amd64:${PAUSE_VERSION}"
-    if [ ! -f "/etc/systemd/system/kubelet.service.d/20-pod-infra-image.conf" ]; then
+
     cat > /etc/systemd/system/kubelet.service.d/20-pod-infra-image.conf <<EOF
 [Service]
 Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
 EOF
-    fi
 
     systemctl daemon-reload
     systemctl enable kubelet
@@ -234,20 +225,20 @@ kube_master_up(){
     export KUBE_ETCD_IMAGE=${KUBE_REPO_PREFIX}"/etcd-amd64:${ETCD_VERSION}"
 
     # 如果使用etcd集群，请使用etcd.endpoints配置
-    cat >> /etc/kubernetes/kubeadm.conf <<EOF
-    apiVersion: kubeadm.k8s.io/v1alpha1
-    kind: MasterConfiguration
-    kubernetesVersion: v${KUBE_VERSION}
-    api:
-      advertiseAddress: ${MASTER_ADDRESS}
-    etcd:
-      image: ${KUBE_ETCD_IMAGE}
-    networking:
-        serviceSubnet: 10.96.0.0/12
-        podSubnet: 10.244.0.0/16
-    imageRepository: ${KUBE_REPO_PREFIX}
-    tokenTTL: 0s
-    token: ${KUBE_TOKEN}
+    cat > /etc/kubernetes/kubeadm.conf <<EOF
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+kubernetesVersion: v${KUBE_VERSION}
+api:
+    advertiseAddress: ${MASTER_ADDRESS}
+etcd:
+    image: ${KUBE_ETCD_IMAGE}
+networking:
+    serviceSubnet: 10.96.0.0/12
+    podSubnet: 10.244.0.0/16
+imageRepository: ${KUBE_REPO_PREFIX}
+tokenTTL: 0s
+token: ${KUBE_TOKEN}
 EOF
 
     kubeadm init --config /etc/kubernetes/kubeadm.conf --skip-preflight-checks
