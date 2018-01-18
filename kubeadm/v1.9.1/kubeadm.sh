@@ -185,7 +185,7 @@ EOF
     echo "kubelet kubeadm kubectl kubernetes-cni installed successfully!"
 
     sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    echo "config --pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
+    echo "config cgroup-driver=cgroupfs success!"
 
     export KUBE_PAUSE_IMAGE=${KUBE_REPO_PREFIX}"/pause-amd64:${PAUSE_VERSION}"
 
@@ -193,6 +193,7 @@ EOF
 [Service]
 Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
 EOF
+    echo "config --pod-infra-container-image=${KUBE_PAUSE_IMAGE} success!"
 
     systemctl daemon-reload
     systemctl enable kubelet
