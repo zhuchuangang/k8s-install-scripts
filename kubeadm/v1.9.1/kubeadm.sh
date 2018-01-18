@@ -198,8 +198,8 @@ EOF
     export KUBE_PAUSE_IMAGE=${KUBE_REPO_PREFIX}"/pause-amd64:${PAUSE_VERSION}"
     if [ ! -f "/etc/systemd/system/kubelet.service.d/20-pod-infra-image.conf" ]; then
     cat > /etc/systemd/system/kubelet.service.d/20-pod-infra-image.conf <<EOF
-    [Service]
-    Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
+[Service]
+Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=${KUBE_PAUSE_IMAGE}"
 EOF
     fi
 
