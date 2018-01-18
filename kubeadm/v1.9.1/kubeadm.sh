@@ -135,6 +135,9 @@ kube_repository()
     if [ ! -n "$FLANNEL_VERSION" ]; then
         export FLANNEL_VERSION="v0.9.1"
     fi
+
+    #KUBE_REPO_PREFIX环境变量已经失效，需要通过MasterConfiguration对象进行设置
+    export KUBE_REPO_PREFIX=registry.cn-hangzhou.aliyuncs.com/szss_k8s
 }
 
 #
@@ -220,9 +223,6 @@ kube_master_up(){
     fi
     # 其他更多参数请通过kubeadm init --help查看
     # 参考：https://kubernetes.io/docs/reference/generated/kubeadm/
-
-    #KUBE_REPO_PREFIX环境变量已经失效，需要通过MasterConfiguration对象进行设置
-    export KUBE_REPO_PREFIX=registry.cn-hangzhou.aliyuncs.com/szss_k8s
     export KUBE_ETCD_IMAGE=${KUBE_REPO_PREFIX}"/etcd-amd64:${ETCD_VERSION}"
 
     # 如果使用etcd集群，请使用etcd.endpoints配置
